@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diwali Greeting & Admin Dashboard</title>
+  <style>
+    /* Reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background: radial-gradient(circle, #ffdf88, #ff8c00);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Header styling */
+    header {
+      background-color: #ff8c00;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    header h1 {
+      font-size: 1.8em;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 1em;
+      margin-top: 0;
+    }
+
+    /* Footer styling */
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      width: 100%;
+      bottom: 0;
+      font-size: 0.9em;
+    }
+
+    /* Main container */
+    .container {
+      text-align: center;
+      padding: 20px;
+      max-width: 500px;
+      background: white;
+      margin: 50px auto;
+      border-radius: 8px;
+      box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+    }
+
+    .name-input, .submit-btn {
+      margin: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 1em;
+      width: calc(100% - 40px);
+      max-width: 400px;
+    }
+
+    .submit-btn {
+      background-color: #ff8c00;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .submit-btn:hover {
+      background-color: #e67600;
+    }
+
+    /* Greeting styling */
+    .greeting {
+      font-size: 2em;
+      color: #333;
+      margin-top: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .greeting.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .name-highlight {
+      font-weight: bold;
+      color: #ff4500;
+      background: linear-gradient(45deg, #ff4500, #ffa500, #ffd700);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: flicker 2s infinite alternate;
+    }
+
+    .extra-message {
+      font-size: 1.3em;
+      color: #555;
+      margin-top: 10px;
+      font-style: italic;
+    }
+
+    .fun-fact {
+      margin-top: 20px;
+      padding: 15px;
+      background: #ffe4b5;
+      color: #a64b00;
+      border-radius: 8px;
+      font-size: 1em;
+      line-height: 1.5;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .diya {
+      font-size: 2em;
+      color: #ffa500;
+      animation: flicker 1.5s infinite alternate;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+
+    .container::after {
+      content: "Created by Sridhar";
+      writing-mode: vertical-rl;
+      font-size: 1em;
+      color: #ff8c00;
+      position: absolute;
+      top: 10px;
+      right: -50px;
+      padding: 10px;
+      border-right: 2px solid #ff8c00;
+    }
+
+    @keyframes flicker {
+      0%, 100% {
+        filter: brightness(1.5);
+        text-shadow: 0 0 5px #ff4500, 0 0 10px #ffa500, 0 0 15px #ffd700, 0 0 20px #ff4500;
+      }
+      50% {
+        filter: brightness(1);
+        text-shadow: 0 0 5px #ff4500, 0 0 10px #ffa500, 0 0 25px #ffd700, 0 0 30px #ff4500;
+      }
+    }
+
+    /* Admin Dashboard styling */
+    .dashboard-container {
+      width: 90%;
+      max-width: 600px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    .dashboard-container h2 {
+      color: #ff8c00;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+    }
+
+    .password-input {
+      margin: 10px;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 1em;
+      width: calc(100% - 40px);
+      max-width: 300px;
+      border: 1px solid #ccc;
+    }
+
+    .name-table {
+      width: 100%;
+      margin: 20px 0;
+      border-collapse: collapse;
+    }
+
+    .name-table th, .name-table td {
+      padding: 10px;
+      border: 1px solid #ddd;
+      text-align: center;
+    }
+
+    .name-table th {
+      background-color: #ff8c00;
+      color: white;
+    }
+
+    .back-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #ff8c00;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <h1>Welcome to Diwali Celebration Page</h1>
+    <p>Enter your name for a personalized Diwali greeting</p>
+  </header>
+
+  <!-- Main Content -->
+  <div class="container" id="greetingContainer">
+    <div id="inputSection">
+      <input type="text" id="nameInput" class="name-input" placeholder="Your Name" />
+      <button class="submit-btn" onclick="displayGreeting()">Submit</button>
+    </div>
+    <div id="greetingMessage" class="greeting"></div>
+    <div id="extraMessage" class="extra-message"></div>
+    <div id="funFact" class="fun-fact"></div>
+    <div id="diyaIcon" class="diya" onclick="handleDiyaClick()">🪔</div>
+  </div>
+
+  <!-- Admin Password Prompt -->
+  <div class="dashboard-container" id="passwordPrompt" style="display: none;">
+    <h2>Admin Login</h2>
+    <input type="password" id="adminPassword" class="password-input" placeholder="Enter Password" />
+    <button onclick="checkPassword()">Login</button>
+    <p id="passwordError" style="color: red; display: none;">Incorrect password. Please try again.</p>
+  </div>
+
+  <!-- Admin Dashboard Content -->
+  <div class="dashboard-container" id="adminDashboard" style="display: none;">
+    <h2>Admin Dashboard</h2>
+    <table class="name-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody id="nameTableBody"></tbody>
+    </table>
+    <a href="#" onclick="returnToMainPage()" class="back-link">Go Back</a>
+  </div>
+
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2024 Diwali Celebration. Wishing you a prosperous and joyful Diwali!</p>
+  </footer>
+
+  <script>
+    let enteredNames = JSON.parse(localStorage.getItem('enteredNames')) || []; // Retrieve or initialize
+    let diyaClickCount = 0; // Counter for diya icon clicks
+    const correctPassword = 'admin123'; // Set your desired password here
+
+    function displayGreeting() {
+      const nameInput = document.getElementById('nameInput').value;
+      if (nameInput) {
+        enteredNames.push(nameInput);
+        localStorage.setItem('enteredNames', JSON.stringify(enteredNames));
+
+        document.getElementById('inputSection').style.display = 'none';
+
+        document.getElementById('greetingMessage').innerHTML = `Happy Diwali, <span class="name-highlight">${nameInput}</span>!`;
+        document.getElementById('greetingMessage').classList.add('visible');
+
+        document.getElementById('extraMessage').innerHTML = "May this Diwali bring brightness and joy to your life!";
+        document.getElementById('extraMessage').style.opacity = 1;
+
+        const funFacts = [
+          "Diwali is celebrated not just by Hindus but also by Jains, Sikhs, and some Buddhists, each with their own historical significance!",
+          "The world’s largest Diwali celebration outside India takes place in Leicester, UK, with over 35,000 attendees each year!",
+          "In Thailand, Diwali is celebrated as Loi Krathong, where people float candles on water to pay respect to the river goddess.",
+          "The famous Indian city of Ayodhya set a Guinness World Record by lighting over 600,000 diyas (oil lamps) on Diwali in 2022!",
+          "Did you know? In some regions of India, Diwali marks the beginning of a new business year, and many merchants perform special rituals!",
+          "Sikh tradition celebrates Diwali as 'Bandi Chhor Divas,' marking the release of Guru Hargobind Ji and 52 princes from imprisonment.",
+          "The tradition of bursting firecrackers during Diwali was introduced in medieval India as a way to drive away evil spirits with loud noises.",
+          "Rangoli, the beautiful art form associated with Diwali, is believed to invite Goddess Lakshmi into homes and keep negativity away.",
+          "Nepal celebrates Diwali as Tihar, where each day honors different animals, like crows, dogs, and cows, as symbols of loyalty and protection.",
+          "In West Bengal, Diwali coincides with Kali Puja, dedicated to the goddess Kali, who represents strength and protection."
+        ];
+
+        document.getElementById('funFact').innerHTML = `<strong>Did You Know?</strong> ${funFacts[Math.floor(Math.random() * funFacts.length)]}`;
+        document.getElementById('funFact').style.opacity = 1;
+      }
+    }
+
+    function handleDiyaClick() {
+      diyaClickCount++;
+      if (diyaClickCount === 4) {
+        diyaClickCount = 0;
+        document.getElementById('greetingContainer').style.display = 'none';
+        document.getElementById('passwordPrompt').style.display = 'block';
+      }
+    }
+
+    function checkPassword() {
+      const password = document.getElementById('adminPassword').value;
+      if (password === correctPassword) {
+        showAdminDashboard();
+      } else {
+        document.getElementById('passwordError').style.display = 'block';
+      }
+    }
+
+    function showAdminDashboard() {
+      document.getElementById('passwordPrompt').style.display = 'none';
+      document.getElementById('adminDashboard').style.display = 'block';
+
+      const nameTableBody = document.getElementById('nameTableBody');
+      nameTableBody.innerHTML = '';
+
+      enteredNames.forEach((name, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${index + 1}</td><td>${name}</td>`;
+        nameTableBody.appendChild(row);
+      });
+    }
+
+    function returnToMainPage() {
+      document.getElementById('adminDashboard').style.display = 'none';
+      document.getElementById('greetingContainer').style.display = 'block';
+    }
+  </script>
+
+</body>
+</html>
